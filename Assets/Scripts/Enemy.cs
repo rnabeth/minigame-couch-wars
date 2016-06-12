@@ -16,7 +16,9 @@ public class Enemy : MonoBehaviour
 	private SpriteRenderer ren;			// Reference to the sprite renderer.
 	private Transform frontCheck;		// Reference to the position of the gameobject used for checking if something is in front.
 	private bool dead = false;			// Whether or not the enemy is dead.
-	private Score score;				// Reference to the Score script.
+	private Score score1;				// Reference to the Score script.
+	private Score score2;				// Reference to the Score script.
+	private int playerNum;
 
 	
 	void Awake()
@@ -24,7 +26,8 @@ public class Enemy : MonoBehaviour
 		// Setting up the references.
 		ren = transform.Find("body").GetComponent<SpriteRenderer>();
 		frontCheck = transform.Find("frontCheck").transform;
-		score = GameObject.Find("Score").GetComponent<Score>();
+		score1 = GameObject.Find("Score1").GetComponent<Score>();
+		score2 = GameObject.Find("Score2").GetComponent<Score>();
 	}
 
 	void FixedUpdate ()
@@ -58,10 +61,11 @@ public class Enemy : MonoBehaviour
 			Death ();
 	}
 	
-	public void Hurt()
+	public void Hurt(int playerWhoShotMe)
 	{
 		// Reduce the number of hit points by one.
 		HP--;
+		playerNum = playerWhoShotMe;
 	}
 	
 	void Death()
@@ -80,7 +84,10 @@ public class Enemy : MonoBehaviour
 		ren.sprite = deadEnemy;
 
 		// Increase the score by 100 points
-		score.score += 100;
+		if (playerNum == 1)
+			score1.score += 100;
+		else
+			score2.score += 100;
 
 		// Set dead to true.
 		dead = true;
